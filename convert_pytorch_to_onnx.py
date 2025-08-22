@@ -361,7 +361,7 @@ def main():
     # }
 
     # convert model
-    export_save_path = convert_to_onnx(args, model, image_tensor)
+    export_save_path = convert_to_onnx('feature_extractor', args, model, image_tensor)
 
     # do inference after conversion
     pred_onnx = get_onnx_predictions(export_save_path, image_tensor)
