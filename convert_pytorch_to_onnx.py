@@ -139,8 +139,10 @@ def load_data(args: Namespace) -> torch.Tensor:
 
 
 def convert_to_onnx(
+    component_name: str,
     args: Namespace, model: torch.nn.Module, image_tensor: torch.Tensor
 ):
+    output_names = ['feature_map', 'score_map'] if component_name == 'feature_extractor' else ['keypoints', 'descriptors', 'scores']
     print("Converting model to ONNX ...")
     export_save_path = args.model_output
     opset_version = args.opset_version
@@ -157,13 +159,7 @@ def convert_to_onnx(
             input_names=[
                 "image",
             ],
-            output_names=[
-                "keypoints",
-                "descriptors",
-                "scores",
-                # "score_dispersity",
-                # "score_map",
-            ],
+            output_names=output_names,
             # dynamic_axes={
             #     "image": {1: "num_channels", 2: "height", 3: "width"},
             #     "keypoints": {1: "num_keypoints"},
