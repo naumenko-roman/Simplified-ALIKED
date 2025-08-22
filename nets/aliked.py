@@ -163,9 +163,9 @@ class ALIKED(nn.Module):
 
     def extract_dense_map(self, image):
         # Pads images such that dimensions are divisible by
-        div_by = 2**5
-        padder = InputPadder(image.shape[-2], image.shape[-1], div_by)
-        image = padder.pad(image)
+        # div_by = 2**5
+        # padder = InputPadder(image.shape[-2], image.shape[-1], div_by)
+        # image = padder.pad(image)
 
         # ================================== feature encoder
         x1 = self.block1(image)  # B x c1 x H x W
@@ -189,8 +189,8 @@ class ALIKED(nn.Module):
         feature_map = torch.nn.functional.normalize(x1234, p=2, dim=1)
 
         # Unpads images
-        feature_map = padder.unpad(feature_map)
-        score_map = padder.unpad(score_map)
+        # feature_map = padder.unpad(feature_map)
+        # score_map = padder.unpad(score_map)
 
         return feature_map, score_map
 

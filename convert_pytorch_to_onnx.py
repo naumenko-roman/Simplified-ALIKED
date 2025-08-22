@@ -98,15 +98,31 @@ def to_numpy(tensor: torch.Tensor):
     )
 
 
-def load_model(args: Namespace) -> torch.nn.Module:
+def load_model(component_name: str, args: Namespace) -> torch.nn.Module:
     print("Loading model ...")
-    model = ALIKED(
-        model_name=args.model,
-        device=args.device,
-        top_k=args.top_k,
-        scores_th=args.scores_th,
-        n_limit=args.n_limit,
-    )
+    if component_name == 'feature_extractor':
+        class FeatureExtractor(ALIKED):
+            def __init__(self, *args, **kwargs):
+                super().__init__(*args, **kwargs)
+
+            def forward(self, image):
+                return super().extract_dense_map(image)
+
+        model = FeatureExtractor(
+            model_name=args.model,
+            device=args.device,
+            top_k=args.top_k,
+            scores_th=args.scores_th,
+            n_limit=args.n_limit,
+        )
+    else:       
+        model = ALIKED(
+            model_name=args.model,
+            device=args.device,
+            top_k=args.top_k,
+            scores_th=args.scores_th,
+            n_limit=args.n_limit,
+        )
     model.eval()
     print("Model loaded!")
     return model
@@ -331,7 +347,7 @@ def main():
     args = parse_args()
 
     # Load model
-    model = load_model(args)
+    model = load_model('feature_extractor', args)
 
     # Load data.
     image_tensor = load_data(args)
