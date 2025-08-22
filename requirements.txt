@@ -4,3 +4,7 @@ tqdm
 torch
 torchvision
 thop
+onnx
+onnxruntime
+pycuda
+tensorrt
